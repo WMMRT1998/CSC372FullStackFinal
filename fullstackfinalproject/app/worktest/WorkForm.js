@@ -6,19 +6,22 @@ export default function WorkForm() {
   const [press, setPress] = useState('');
   const [date, setDate] = useState('');
   const [crew, setCrew] = useState('');
+  const [estop, setEstop] = useState('');
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('/api/worktest', {
+    const response = await fetch('/api/workchecklist', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ teamLeader, press, date, crew })
+      body: JSON.stringify({ teamLeader, press, date, crew, estop}),
     });
     if (response.ok) {
       setTeamLeader('');
       setPress('');
       setDate('');
       setCrew('');
+      setEstop('');
     }
   };
   return (
@@ -36,7 +39,9 @@ export default function WorkForm() {
       <input
         type="text" value={crew} onChange={(e) => setCrew(e.target.value)} placeholder="Crew"
       />
-      
+      <input
+        type="button" value={estop ? new Date(estop).toLocaleTimeString() : 'E-Stop'} onClick={() => setEstop(new Date().toISOString())}
+      />
       <button type="submit">Create Work Entry</button>
     </form>
   );

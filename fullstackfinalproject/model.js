@@ -1,25 +1,25 @@
 // model.js
 import pool from './dbConnection.js';
 
-export async function createEntry(teamLeader, press, date, crew) {
+export async function createEntry(teamLeader, press, date, crew, estop) {
   const result = await pool.query(
-    'INSERT INTO worktest (teamLeader, press, date, crew) VALUES ($1, $2, $3, $4) RETURNING *',
-    [teamLeader, press, date, crew]
+    'INSERT INTO workchecklist (teamLeader, press, date, crew, estop) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+    [teamLeader, press, date, crew, estop || null]
   );
   return result.rows[0];
 }
 
 export async function getAllEntries() {
-  const result = await pool.query('SELECT * FROM worktest');
+  const result = await pool.query('SELECT * FROM workchecklist');
   return result.rows;
 }
 
 export async function getEntryById(entryId) {
-  const result = await pool.query('SELECT * FROM worktest WHERE id = $1', [entryId]);
+  const result = await pool.query('SELECT * FROM workchecklist WHERE id = $1', [entryId]);
   return result.rows[0];
 }
 
 export async function deleteEntry(entryId) {
-  const result = await pool.query('DELETE FROM worktest WHERE id = $1 RETURNING *', [entryId]);
+  const result = await pool.query('DELETE FROM workchecklist WHERE id = $1 RETURNING *', [entryId]);
   return result.rows[0];
 }
